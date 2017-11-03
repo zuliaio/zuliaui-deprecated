@@ -62,7 +62,7 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 
 		try {
 			ZuliaPoolConfig zuliaPoolConfig = new ZuliaPoolConfig().addNode("localhost").setDefaultRetries(2);
-			zuliaPoolConfig.setMemberUpdateEnabled(false);
+			zuliaPoolConfig.setNodeUpdateEnabled(false);
 			zuliaWorkPool = new ZuliaWorkPool(zuliaPoolConfig);
 
 			Properties properties = new Properties();
