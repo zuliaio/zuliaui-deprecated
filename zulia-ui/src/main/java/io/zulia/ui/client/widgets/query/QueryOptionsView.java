@@ -1,5 +1,6 @@
 package io.zulia.ui.client.widgets.query;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,6 +20,8 @@ import gwt.material.design.client.ui.html.Br;
 import gwt.material.design.client.ui.html.Div;
 import gwt.material.design.client.ui.html.Option;
 import io.zulia.ui.client.controllers.MainController;
+import io.zulia.ui.client.eventbus.SearchLoadedEvent;
+import io.zulia.ui.client.eventbus.SearchLoadedHandler;
 import io.zulia.ui.client.places.QueryPlace;
 import io.zulia.ui.client.services.ServiceProvider;
 import io.zulia.ui.client.widgets.base.CustomTabPanel;
@@ -27,6 +30,7 @@ import io.zulia.ui.client.widgets.base.ToastHelper;
 import io.zulia.ui.shared.IndexInfo;
 import io.zulia.ui.shared.UIQueryObject;
 import io.zulia.ui.shared.UIQueryResults;
+import io.zulia.ui.shared.UIQueryState;
 import io.zulia.ui.shared.UIUtil;
 
 import java.util.ArrayList;
@@ -38,28 +42,25 @@ import java.util.Map;
  * Created by Payam Meyer on 3/27/17.
  * @author pmeyer
  */
-public class QueryOptionsView extends Div {
+public class QueryOptionsView extends Div implements SearchLoadedHandler {
 
 	private UIQueryObject uiQueryObject;
 	private final MaterialCollapsible fieldNameCollapsible;
 	private final Map<String, MaterialCollapsibleItem> fieldItems = new HashMap<>();
 	private final Div filterQueryDiv;
 	private List<FilterQueryWidget> filterQueries = new ArrayList<>();
+	private final MaterialBadge resultsBadge;
+	private final MaterialListBox indexesListBox;
+	private final CustomTextBox searchBox;
+	private final CustomTextBox rowsIntegerBox;
 
-	public QueryOptionsView(UIQueryResults uiQueryResults) {
+	public QueryOptionsView() {
 		setMargin(15);
 		setPadding(10);
 
-		uiQueryObject = uiQueryResults.getUiQueryObject();
-		if (uiQueryObject == null) {
-			uiQueryObject = new UIQueryObject();
-		}
-
-		if (!uiQueryResults.getJsonDocs().isEmpty()) {
-			MaterialBadge resultsBadge = new MaterialBadge("Total Results: " + NumberFormat.getFormat("#,##0").format(uiQueryResults.getTotalResults()));
-			add(resultsBadge);
-			add(new Br());
-		}
+		resultsBadge = new MaterialBadge();
+		add(resultsBadge);
+		add(new Br());
 
 		MaterialButton executeButton = new MaterialButton("Execute", IconType.SEARCH);
 		executeButton.addClickHandler(clickEvent -> runSearch());
@@ -70,7 +71,7 @@ public class QueryOptionsView extends Div {
 		resetButton.addClickHandler(clickEvent -> MainController.get().goTo(new QueryPlace(null)));
 		add(resetButton);
 
-		MaterialListBox indexesListBox = new MaterialListBox();
+		indexesListBox = new MaterialListBox();
 		indexesListBox.setMultipleSelect(true);
 		Option selectOneIndexOption = new Option("Select Indexes");
 		selectOneIndexOption.setDisabled(true);
@@ -78,22 +79,12 @@ public class QueryOptionsView extends Div {
 
 		fieldNameCollapsible = new MaterialCollapsible();
 		fieldNameCollapsible.setAccordion(false);
-		for (IndexInfo indexInfo : uiQueryResults.getIndexes()) {
-			createFieldNameCollapsible(indexInfo);
 
-			Option option = new Option(indexInfo.getName());
-			if (uiQueryObject.getIndexNames().contains(indexInfo.getName())) {
-				option.setSelected(true);
-				fieldItems.get(indexInfo.getName()).setVisible(true);
-			}
-			indexesListBox.add(option);
-		}
 		indexesListBox.addValueChangeHandler(valueChangeEvent -> {
 			for (String indexName : fieldItems.keySet()) {
 				fieldItems.get(indexName).setVisible(false);
 			}
 			for (String itemsSelected : indexesListBox.getItemsSelected()) {
-				uiQueryObject.getIndexNames().add(itemsSelected);
 				fieldItems.get(itemsSelected).setVisible(true);
 			}
 		});
@@ -101,30 +92,23 @@ public class QueryOptionsView extends Div {
 		add(indexesListBox);
 		add(fieldNameCollapsible);
 
-		CustomTextBox searchBox = new CustomTextBox(true);
+		searchBox = new CustomTextBox(true);
 		searchBox.setPlaceHolder("q=*:*");
-		searchBox.setValue(uiQueryObject.getQuery());
 		searchBox.addKeyUpHandler(clickEvent -> {
 			if (clickEvent.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-				uiQueryObject.setQuery(searchBox.getValue());
 				runSearch();
 			}
 		});
 
 		searchBox.getButton().setTitle("Execute Query");
 		searchBox.getButton().addClickHandler(clickEvent -> {
-			uiQueryObject.setQuery(searchBox.getValue());
 			runSearch();
 		});
 
 		add(searchBox);
 
-		CustomTextBox rowsIntegerBox = new CustomTextBox();
+		rowsIntegerBox = new CustomTextBox();
 		rowsIntegerBox.setPlaceHolder("rows (defaults to 10)");
-		if (uiQueryObject != null && uiQueryObject.getRows() != 10) {
-			rowsIntegerBox.setValue(uiQueryObject.getRows() + "");
-		}
-		rowsIntegerBox.getTextBox().addChangeHandler(changeEvent -> uiQueryObject.setRows(Integer.valueOf(rowsIntegerBox.getValue())));
 		rowsIntegerBox.addKeyUpHandler(clickEvent -> {
 			if (clickEvent.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 				runSearch();
@@ -134,17 +118,11 @@ public class QueryOptionsView extends Div {
 		add(rowsIntegerBox);
 
 		filterQueryDiv = new Div();
-		if (!uiQueryObject.getFilterQueries().isEmpty()) {
-			for (String fq : uiQueryObject.getFilterQueries()) {
-				createFilterQueryWidget(fq);
-			}
-		}
-		else {
-			createFilterQueryWidget(null);
-		}
+		createFilterQueryWidget(null);
 
 		add(filterQueryDiv);
 
+		MainController.get().getEventBus().addHandler(SearchLoadedEvent.TYPE, this);
 	}
 
 	private void createFilterQueryWidget(String fq) {
@@ -195,16 +173,16 @@ public class QueryOptionsView extends Div {
 
 		String qfTabId = UIUtil.getRandomId();
 		MaterialTabItem qfTabItem = tabPanel.createAndAddTabListItem("QF", "#" + qfTabId);
-		tabPanel.createAndAddTabPane(qfTabId, new FieldsDiv(indexInfo.getQfList(), uiQueryObject.getQueryFields()));
+		tabPanel.createAndAddTabPane(qfTabId, new FieldsDiv(indexInfo.getQfList(), indexInfo.getQfList()));
 		header.addClickHandler(clickEvent -> qfTabItem.selectTab());
 
 		String flTabId = UIUtil.getRandomId();
 		tabPanel.createAndAddTabListItem("FL", "#" + flTabId);
-		tabPanel.createAndAddTabPane(flTabId, new FieldsDiv(indexInfo.getFlList(), uiQueryObject.getDisplayFields()));
+		tabPanel.createAndAddTabPane(flTabId, new FieldsDiv(indexInfo.getFlList(), indexInfo.getFlList()));
 
 		String facetsTabId = UIUtil.getRandomId();
 		tabPanel.createAndAddTabListItem("Facets", "#" + facetsTabId);
-		tabPanel.createAndAddTabPane(facetsTabId, new FieldsDiv(indexInfo.getFacetList(), uiQueryObject.getFacets()));
+		tabPanel.createAndAddTabPane(facetsTabId, new FieldsDiv(indexInfo.getFacetList(), indexInfo.getFacetList()));
 
 		body.add(tabPanel);
 
@@ -215,6 +193,14 @@ public class QueryOptionsView extends Div {
 	}
 
 	private void runSearch() {
+		if (uiQueryObject == null) {
+			uiQueryObject = new UIQueryObject();
+		}
+
+		uiQueryObject.setQuery(searchBox.getValue());
+
+		uiQueryObject.setRows(Integer.valueOf(rowsIntegerBox.getValue()));
+
 		for (FilterQueryWidget fqw : filterQueries) {
 			if (!fqw.getValue().isEmpty()) {
 				uiQueryObject.getFilterQueries().add(fqw.getValue());
@@ -233,4 +219,41 @@ public class QueryOptionsView extends Div {
 		});
 	}
 
+	@Override
+	public void handleSearchLoaded(UIQueryResults uiQueryResults) {
+
+		this.uiQueryObject = uiQueryResults.getUiQueryObject();
+
+		searchBox.setValue(uiQueryObject.getQuery());
+
+		resultsBadge.setText("Total Results: " + NumberFormat.getFormat("#,##0").format(uiQueryResults.getTotalResults()));
+
+		if (uiQueryObject.getRows() != 10) {
+			rowsIntegerBox.setValue(String.valueOf(uiQueryObject.getRows()));
+		}
+
+		for (IndexInfo indexInfo : UIQueryState.getIndexes()) {
+			if (uiQueryObject.getIndexNames().contains(indexInfo.getName())) {
+				// TODO: Set the option as selected
+				fieldItems.get(indexInfo.getName()).setVisible(true);
+			}
+		}
+
+		if (!uiQueryObject.getFilterQueries().isEmpty()) {
+			for (String fq : uiQueryObject.getFilterQueries()) {
+				createFilterQueryWidget(fq);
+			}
+		}
+	}
+
+	public void drawOptions(UIQueryResults uiQueryResults) {
+		for (IndexInfo indexInfo : uiQueryResults.getIndexes()) {
+			GWT.log("Creating collapsible for index: " + indexInfo.getName() + " Fields: " + indexInfo.getFlList().size());
+			createFieldNameCollapsible(indexInfo);
+
+			Option option = new Option(indexInfo.getName());
+			indexesListBox.add(option);
+			GWT.log("Created collapsible for index: " + indexInfo.getName());
+		}
+	}
 }

@@ -4,11 +4,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import gwt.material.design.client.ui.html.Div;
+import gwt.material.design.client.ui.MaterialPanel;
 import gwt.material.design.client.ui.html.Main;
 import io.zulia.ui.client.bundle.MainResources;
 import io.zulia.ui.client.charting.HighChartsInjector;
-import io.zulia.ui.client.charting.Highcharts;
 import io.zulia.ui.client.highlighter.HighlighterInjector;
 import io.zulia.ui.client.places.PlaceHandler;
 import io.zulia.ui.client.widgets.base.Footer;
@@ -33,20 +32,24 @@ public class ZuliaUI implements ContentPresenter, EntryPoint {
 			@Override
 			public void onload() {
 
-				Div div = new Div();
+				MaterialPanel mainWrapper = new MaterialPanel();
 
 				header = new Header();
-				Main main = createBaseView();
+
+				Main main = new Main();
+				simplePanel = new SimplePanel();
+				main.add(simplePanel);
+
 				footer = new Footer();
 
-				div.add(header);
-				div.add(main);
-				div.add(footer);
+				mainWrapper.add(header);
+				mainWrapper.add(main);
+				mainWrapper.add(footer);
 
 				PlaceHandler placeHandler = new PlaceHandler(ZuliaUI.this);
 				placeHandler.init();
 
-				RootPanel.get().add(div);
+				RootPanel.get().insert(mainWrapper, 0);
 			}
 		};
 		highChartsInjector.inject();
@@ -58,13 +61,10 @@ public class ZuliaUI implements ContentPresenter, EntryPoint {
 
 		Main main = new Main();
 		main.setId("main-wrapper");
-		main.setMarginTop(40);
-		main.setMarginBottom(40);
 
 		simplePanel = new SimplePanel();
-		main.add(simplePanel);
 
-		Highcharts.setExportUrl("");
+		main.add(simplePanel);
 
 		return main;
 	}

@@ -23,6 +23,10 @@ import java.util.Map;
  */
 public class HomeView extends Div {
 
+	public HomeView() {
+		setPaddingTop(65);
+	}
+
 	public void drawSplashPage(InstanceInfo instanceInfo) {
 		clear();
 

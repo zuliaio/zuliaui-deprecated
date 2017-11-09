@@ -1,17 +1,14 @@
 package io.zulia.ui.client.widgets.base;
 
+import com.google.gwt.dom.client.Style;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.constants.NavBarType;
-import gwt.material.design.client.constants.SideNavType;
-import gwt.material.design.client.constants.TextAlign;
 import gwt.material.design.client.ui.MaterialHeader;
 import gwt.material.design.client.ui.MaterialImage;
 import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.MaterialNavBar;
 import gwt.material.design.client.ui.MaterialNavBrand;
-import gwt.material.design.client.ui.MaterialNavSection;
-import gwt.material.design.client.ui.MaterialSideNav;
+import gwt.material.design.client.ui.MaterialSideNavDrawer;
 import io.zulia.ui.client.bundle.MainResources;
 import io.zulia.ui.client.controllers.MainController;
 import io.zulia.ui.client.places.HomePlace;
@@ -23,32 +20,31 @@ import io.zulia.ui.client.places.QueryPlace;
  */
 public class Header extends MaterialHeader {
 
-	private final MaterialSideNav sideNav;
+	private final MaterialSideNavDrawer sideNav;
 
 	public Header() {
 
 		MaterialNavBar navBar = new MaterialNavBar();
+		navBar.setLayoutPosition(Style.Position.FIXED);
+		navBar.setShadow(0);
 		navBar.setActivates("sideNav");
-		navBar.setType(NavBarType.FIXED);
-		navBar.setWidth("100%");
-		navBar.setBackgroundColor(Color.GREY_DARKEN_2);
+		navBar.getElement().getStyle().setZIndex(999);
 
-		MaterialNavSection navSection = new MaterialNavSection();
-		navSection.setTextAlign(TextAlign.RIGHT);
+		sideNav = new MaterialSideNavDrawer();
 
-		navBar.add(navSection);
-
-		sideNav = new MaterialSideNav(SideNavType.PUSH);
-		sideNav.setWidth("60");
-		sideNav.setId("sideNav");
-		sideNav.setBackgroundColor(Color.GREY_LIGHTEN_3);
-		sideNav.setCloseOnClick(true);
-		sideNav.setType(SideNavType.PUSH);
 		MaterialNavBrand navBrand = new MaterialNavBrand();
 		navBrand.add(new MaterialImage(MainResources.INSTANCE.logo()));
 		navBrand.setHref("#");
 		navBrand.addClickHandler(clickEvent -> sideNav.hide());
-		sideNav.add(navBrand);
+
+		//navBar.add(navBrand);
+
+		add(navBar);
+
+		sideNav.setWidth("60");
+		sideNav.setId("sideNav");
+		sideNav.setBackgroundColor(Color.GREY_LIGHTEN_3);
+		sideNav.setCloseOnClick(true);
 
 		{
 			MaterialLink overView = new MaterialLink(IconType.INFO);
@@ -69,7 +65,7 @@ public class Header extends MaterialHeader {
 
 	}
 
-	public MaterialSideNav getSideNav() {
+	public MaterialSideNavDrawer getSideNav() {
 		return sideNav;
 	}
 

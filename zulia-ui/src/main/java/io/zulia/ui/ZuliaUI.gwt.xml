@@ -7,8 +7,8 @@
 
     <inherits name="gwt.material.design.GwtMaterialWithJQuery"/>
     <inherits name="gwt.material.design.addins.GwtMaterialAddins"/>
-    <inherits name="gwt.material.design.themes.ThemeGrey"/>
-    <inherits name="gwt.material.design.themes.ThemeGreyResources"/>
+    <inherits name="gwt.material.design.themes.ThemeOrange"/>
+    <inherits name="gwt.material.design.themes.ThemeOrangeResources"/>
 
     <inherits name="org.mongodb.morphia.Morphia"/>
 

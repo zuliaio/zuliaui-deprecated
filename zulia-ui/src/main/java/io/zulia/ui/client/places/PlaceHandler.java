@@ -140,20 +140,20 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 	protected void displayQueryPlace(QueryPlace place) {
 		getContentPresenter().setContent(null);
 
-		MaterialLoader.showLoading(true);
+		MaterialLoader.loading(true);
 
 		if (place.getQueryId() != null) {
 			// execute query and show the query/results page.
 			ServiceProvider.get().getZuliaService().search(place.getQueryId(), new AsyncCallback<UIQueryResults>() {
 				@Override
 				public void onFailure(Throwable caught) {
-					MaterialLoader.showLoading(false);
+					MaterialLoader.loading(false);
 					ToastHelper.showFailure(caught.getMessage());
 				}
 
 				@Override
 				public void onSuccess(UIQueryResults result) {
-					MaterialLoader.showLoading(false);
+					MaterialLoader.loading(false);
 					getWidgetController().getQueryView().draw(result);
 					getContentPresenter().setContent(getWidgetController().getQueryView());
 				}
@@ -165,13 +165,13 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 				ServiceProvider.get().getZuliaService().getInstanceInfo(new AsyncCallback<InstanceInfo>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						MaterialLoader.showLoading(false);
+						MaterialLoader.loading(false);
 						ToastHelper.showFailure(caught.getMessage());
 					}
 
 					@Override
 					public void onSuccess(InstanceInfo result) {
-						MaterialLoader.showLoading(false);
+						MaterialLoader.loading(false);
 						UIQueryResults results = new UIQueryResults();
 						results.setIndexes(result.getIndexes());
 						getWidgetController().getQueryView().draw(results);
@@ -180,11 +180,14 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 				});
 			}
 			else {
-				MaterialLoader.showLoading(false);
+				MaterialLoader.loading(false);
+				GWT.log("Loading the page?");
 				UIQueryResults results = new UIQueryResults();
 				results.setIndexes(UIQueryState.getIndexes());
+				GWT.log("Got indexes, drawing the page.");
 				getWidgetController().getQueryView().draw(results);
 				getContentPresenter().setContent(getWidgetController().getQueryView());
+				GWT.log("Loaded?");
 			}
 		}
 	}

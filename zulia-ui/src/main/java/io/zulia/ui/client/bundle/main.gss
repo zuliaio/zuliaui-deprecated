@@ -14,7 +14,7 @@ body {
 .searchBox {
     cursor: text;
     height: 40px;
-    background: rgba(0, 0, 0, 0.31);
+    background: rgba(251, 140, 0, 0.7);
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -webkit-border-radius: 3px;
@@ -56,6 +56,22 @@ body {
     z-index: 0 !important;
     color: white;
     width: 400px !important;
+}
+
+.searchBoxInput::-webkit-input-placeholder { /*chrome/safari/opera*/
+    color: white;
+}
+
+.searchBoxInput::-moz-placeholder { /* Firefox 19+ */
+    color: pink;
+}
+
+.searchBoxInput:-ms-input-placeholder { /* IE 10+ */
+    color: pink;
+}
+
+.searchBoxInput:-moz-placeholder { /* Firefox 18- */
+    color: pink;
 }
 
 .selectable {

@@ -6,11 +6,11 @@ dependencies {
     // Needed by GWT, should be handled by gradle build
     compile('javax.validation:validation-api:1.0.0.GA')
 
-    compile('com.github.gwtmaterialdesign:gwt-material:2.0-rc4')
-    compile('com.github.gwtmaterialdesign:gwt-material-themes:2.0-rc4')
-    compile('com.github.gwtmaterialdesign:gwt-material-addins:2.0-rc4')
-    compile('com.github.gwtmaterialdesign:gwt-material-jquery:1.0-rc4')
-    compile('com.github.gwtmaterialdesign:gwt-material-table:1.0-rc4')
+    compile('com.github.gwtmaterialdesign:gwt-material:2.0')
+    compile('com.github.gwtmaterialdesign:gwt-material-themes:2.0')
+    compile('com.github.gwtmaterialdesign:gwt-material-addins:2.0')
+    compile('com.github.gwtmaterialdesign:gwt-material-jquery:2.0-rc7')
+    compile('com.github.gwtmaterialdesign:gwt-material-table:2.0')
     compile('org.kohsuke:github-api:1.56') {
         exclude group: 'org.jenkins-ci' //by group
         exclude group: 'commons-lang'

@@ -26,19 +26,24 @@ public class QueryView extends Div implements ResizeHandler {
 
 	private final MaterialPanel leftPanel;
 	private final MaterialPanel rightPanel;
+	private final QueryOptionsView queryOptionsView;
 	private ScrollPanel leftScrollPanel;
 	private ScrollPanel rightScrollPanel;
 	private final MaterialSplitPanel splitPanel;
 
 	public QueryView() {
+		setPaddingTop(63);
+
 		splitPanel = new MaterialSplitPanel();
-		splitPanel.setHeight(Window.getClientHeight() - 102 + "px");
+		splitPanel.setHeight(Window.getClientHeight() - 130 + "px");
 		splitPanel.setBarPosition(25);
 		leftPanel = new MaterialPanel();
 		leftPanel.setBackgroundColor(Color.WHITE);
 		leftPanel.setGrid("s6 l3");
 		leftScrollPanel = new ScrollPanel();
 		leftScrollPanel.setHeight(Window.getClientHeight() - 130 + "px");
+		queryOptionsView = new QueryOptionsView();
+		leftScrollPanel.setWidget(queryOptionsView);
 
 		rightPanel = new MaterialPanel();
 		rightPanel.setBackgroundColor(Color.GREY_LIGHTEN_2);
@@ -56,9 +61,9 @@ public class QueryView extends Div implements ResizeHandler {
 		leftPanel.clear();
 		rightPanel.clear();
 
-		leftScrollPanel.setWidget(new QueryOptionsView(uiQueryResults));
-
 		leftPanel.add(leftScrollPanel);
+
+		queryOptionsView.drawOptions(uiQueryResults);
 
 		if (!uiQueryResults.getJsonDocs().isEmpty()) {
 			if (!uiQueryResults.getFacetCountsMap().isEmpty()) {

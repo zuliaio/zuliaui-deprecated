@@ -24,4 +24,5 @@ public class WidgetController {
 	public QueryView getQueryView() {
 		return queryView;
 	}
+
 }
