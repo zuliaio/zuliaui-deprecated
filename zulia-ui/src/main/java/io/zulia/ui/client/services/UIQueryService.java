@@ -6,6 +6,8 @@ import io.zulia.ui.shared.InstanceInfo;
 import io.zulia.ui.shared.UIQueryObject;
 import io.zulia.ui.shared.UIQueryResults;
 
+import java.util.List;
+
 @RemoteServiceRelativePath("uiqueryservice")
 public interface UIQueryService extends RemoteService {
 
@@ -14,4 +16,6 @@ public interface UIQueryService extends RemoteService {
 	UIQueryResults search(String queryId) throws Exception;
 
 	String saveQuery(UIQueryObject uiQueryObject) throws Exception;
+
+	List<String> suggestFieldNames(String indexName, String query) throws Exception;
 }

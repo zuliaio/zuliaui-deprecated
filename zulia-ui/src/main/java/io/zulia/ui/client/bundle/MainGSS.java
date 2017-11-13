@@ -21,4 +21,6 @@ public interface MainGSS extends CssResource {
 	String wordBreakAll();
 
 	String borderBottom();
+
+	String topMarginFive();
 }

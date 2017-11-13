@@ -181,13 +181,10 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 			}
 			else {
 				MaterialLoader.loading(false);
-				GWT.log("Loading the page?");
 				UIQueryResults results = new UIQueryResults();
 				results.setIndexes(UIQueryState.getIndexes());
-				GWT.log("Got indexes, drawing the page.");
 				getWidgetController().getQueryView().draw(results);
 				getContentPresenter().setContent(getWidgetController().getQueryView());
-				GWT.log("Loaded?");
 			}
 		}
 	}

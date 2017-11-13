@@ -5,6 +5,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.util.JSONSerializers;
+import io.zulia.client.command.GetFields;
 import io.zulia.client.command.GetIndexConfig;
 import io.zulia.client.command.Query;
 import io.zulia.client.config.ZuliaPoolConfig;
@@ -18,6 +19,7 @@ import io.zulia.ui.shared.InstanceInfo;
 import io.zulia.ui.shared.UIQueryObject;
 import io.zulia.ui.shared.UIQueryResults;
 import io.zulia.util.ResultHelper;
+import io.zulia.util.ZuliaUtil;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -28,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.ServletException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
@@ -293,6 +296,12 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 			}
 
 			for (String facet : uiQueryObject.getFacets()) {
+
+				for (ZuliaQuery.FacetGroup facetGroup : queryResult.getFacetGroups()) {
+					System.out.println("FacetGroup: " + facetGroup.getCountRequest().getFacetField().getLabel());
+					System.out.println("FacetGroup2: " + facetGroup.getCountRequest().getFacetField().getValue());
+					System.out.println("FacetGroup3: " + facetGroup.getFacetCountList());
+				}
 				if (queryResult.getFacetCounts(facet) != null) {
 					for (FacetCount fc : queryResult.getFacetCounts(facet)) {
 						results.addFacetCount(fc.getFacet(), fc.getCount());
@@ -317,6 +326,41 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 			LOG.error("Failed to save the query.");
 			throw e;
 		}
+	}
+
+	@Override
+	public List<String> suggestFieldNames(String indexName, String query) throws Exception {
+
+		try {
+			List<String> fieldNames = zuliaWorkPool.getFields(new GetFields(indexName)).getFieldNames();
+
+			query = query.toLowerCase();
+
+			TreeMap<String, Integer> suggestToDistance = new TreeMap<>();
+
+			for (String fieldName : fieldNames) {
+				if (fieldName.contains(query)) {
+					int distance = ZuliaUtil.computeLevenshteinDistance(query, fieldName);
+					suggestToDistance.put(fieldName, distance);
+				}
+			}
+
+			ArrayList<Map.Entry<String, Integer>> entries = new ArrayList<>(suggestToDistance.entrySet());
+			entries.sort(Map.Entry.comparingByValue());
+
+			List<String> sortedSuggest = new ArrayList<>();
+			for (Map.Entry<String, Integer> e : entries) {
+				sortedSuggest.add(e.getKey());
+			}
+
+			return sortedSuggest;
+
+		}
+		catch (Exception e) {
+			LOG.error("Failed to get field name suggestions.", e);
+			throw e;
+		}
+
 	}
 
 }

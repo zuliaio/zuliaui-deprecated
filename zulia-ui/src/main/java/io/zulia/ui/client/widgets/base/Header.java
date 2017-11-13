@@ -26,6 +26,7 @@ public class Header extends MaterialHeader {
 
 		MaterialNavBar navBar = new MaterialNavBar();
 		navBar.setLayoutPosition(Style.Position.FIXED);
+		navBar.setBackgroundColor(Color.ORANGE_DARKEN_1);
 		navBar.setShadow(0);
 		navBar.setActivates("sideNav");
 		navBar.getElement().getStyle().setZIndex(999);

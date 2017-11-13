@@ -24,9 +24,9 @@ public class CustomTabPanel extends MaterialRow {
 
 		materialTab = new MaterialTab();
 		materialTab.setType(tabType);
-		materialTab.setBackgroundColor(Color.GREY_DARKEN_1);
-		materialTab.setTextColor(Color.GREY_DARKEN_1);
-		materialTab.setIndicatorColor(Color.AMBER);
+		materialTab.setBackgroundColor(Color.ORANGE_LIGHTEN_1);
+		materialTab.setTextColor(Color.WHITE);
+		materialTab.setIndicatorColor(Color.GREY_DARKEN_1);
 
 		mainColumn = new MaterialColumn();
 		mainColumn.setGrid("s12");
@@ -40,6 +40,7 @@ public class CustomTabPanel extends MaterialRow {
 		MaterialTabItem tabItem = new MaterialTabItem();
 		tabItem.setWaves(WavesType.YELLOW);
 		tabItem.setGrid("s4");
+		tabItem.setTextColor(Color.WHITE);
 
 		MaterialLink materialLink = new MaterialLink(iconType);
 		materialLink.setHref(dataTarget);
@@ -56,9 +57,11 @@ public class CustomTabPanel extends MaterialRow {
 		MaterialTabItem tabItem = new MaterialTabItem();
 		tabItem.setGrid("s4");
 		tabItem.setWaves(WavesType.YELLOW);
+		tabItem.setTextColor(Color.WHITE);
 
 		MaterialLink materialLink = new MaterialLink(tabName);
 		materialLink.setHref(dataTarget);
+		materialLink.setTextColor(Color.WHITE);
 		tabItem.add(materialLink);
 
 		materialTab.add(tabItem);
