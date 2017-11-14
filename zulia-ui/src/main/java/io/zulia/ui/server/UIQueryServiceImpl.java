@@ -1,6 +1,7 @@
 package io.zulia.ui.server;
 
 import com.cedarsoftware.util.io.JsonWriter;
+import com.google.common.base.Splitter;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
@@ -63,9 +64,20 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 		super.init();
 
 		try {
-			ZuliaPoolConfig zuliaPoolConfig = new ZuliaPoolConfig().addNode(config.get("zuliaHost")).setDefaultRetries(2);
-			zuliaPoolConfig.setNodeUpdateEnabled(false);
-			zuliaWorkPool = new ZuliaWorkPool(zuliaPoolConfig);
+			ZuliaPoolConfig zuliaPoolConfig;
+			String zuliaHost = config.get("zuliaHost");
+			if (zuliaHost.contains(";")) {
+				zuliaPoolConfig = new ZuliaPoolConfig().setNodeUpdateEnabled(true).setDefaultRetries(2);
+				for (String node : Splitter.on(";").trimResults().splitToList(zuliaHost)) {
+					zuliaPoolConfig.addNode(node);
+				}
+				zuliaWorkPool = new ZuliaWorkPool(zuliaPoolConfig);
+				zuliaWorkPool.updateNodes();
+			}
+			else {
+				zuliaPoolConfig = new ZuliaPoolConfig().addNode(zuliaHost).setNodeUpdateEnabled(false).setDefaultRetries(2);
+				zuliaWorkPool = new ZuliaWorkPool(zuliaPoolConfig);
+			}
 
 			MongoClientOptions mongoClientOptions = MongoClientOptions.builder().connectionsPerHost(32).build();
 			MongoClient mongoClient = new MongoClient(config.get("mongoHost"), mongoClientOptions);
