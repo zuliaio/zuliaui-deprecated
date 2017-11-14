@@ -42,7 +42,7 @@ public class Footer extends MaterialFooter {
 		chatButton.addClickHandler(clickEvent -> Window
 				.open("https://gitter.im/lumongo/lumongo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge", "_blank",
 						"menubar=1,status=1,toolbar=1,scrollbars=1,resizable=1"));
-		rightColumn.add(chatButton);
+		//rightColumn.add(chatButton);
 
 		MaterialButton sourceButton = new MaterialButton("Source");
 		sourceButton.setMarginTop(10);

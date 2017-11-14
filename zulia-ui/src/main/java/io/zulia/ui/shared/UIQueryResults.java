@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class UIQueryResults implements IsSerializable {
 
 	private List<IndexInfo> indexes = Collections.emptyList();
 	private List<String> jsonDocs = Collections.emptyList();
-	private Map<String, Long> facetCountsMap = Collections.emptyMap();
+	private Map<String, Map<String, Long>> facetCountsMap = Collections.emptyMap();
 	private UIQueryObject uiQueryObject;
 	private long totalResults;
 
@@ -42,14 +43,14 @@ public class UIQueryResults implements IsSerializable {
 		return jsonDocs;
 	}
 
-	public void addFacetCount(String facet, long count) {
+	public void addFacetCount(String fieldName, String facet, long count) {
 		if (facetCountsMap.isEmpty()) {
 			facetCountsMap = new HashMap<>();
 		}
-		facetCountsMap.put(facet, count);
+		facetCountsMap.computeIfAbsent(fieldName, v -> new LinkedHashMap<>()).put(facet, count);
 	}
 
-	public Map<String, Long> getFacetCountsMap() {
+	public Map<String, Map<String, Long>> getFacetCountsMap() {
 		return facetCountsMap;
 	}
 

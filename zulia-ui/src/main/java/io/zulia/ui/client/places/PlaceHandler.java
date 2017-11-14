@@ -149,12 +149,13 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 				public void onFailure(Throwable caught) {
 					MaterialLoader.loading(false);
 					ToastHelper.showFailure(caught.getMessage());
+					MainController.get().goTo(new QueryPlace(null));
 				}
 
 				@Override
 				public void onSuccess(UIQueryResults result) {
-					MaterialLoader.loading(false);
 					getWidgetController().getQueryView().draw(result);
+					MaterialLoader.loading(false);
 					getContentPresenter().setContent(getWidgetController().getQueryView());
 				}
 			});
@@ -171,19 +172,19 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 
 					@Override
 					public void onSuccess(InstanceInfo result) {
-						MaterialLoader.loading(false);
 						UIQueryResults results = new UIQueryResults();
 						results.setIndexes(result.getIndexes());
 						getWidgetController().getQueryView().draw(results);
+						MaterialLoader.loading(false);
 						getContentPresenter().setContent(getWidgetController().getQueryView());
 					}
 				});
 			}
 			else {
-				MaterialLoader.loading(false);
 				UIQueryResults results = new UIQueryResults();
 				results.setIndexes(UIQueryState.getIndexes());
 				getWidgetController().getQueryView().draw(results);
+				MaterialLoader.loading(false);
 				getContentPresenter().setContent(getWidgetController().getQueryView());
 			}
 		}
@@ -191,11 +192,13 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 
 	protected void displayHomePlace() {
 		getContentPresenter().setContent(null);
+		MaterialLoader.loading(true);
 
 		// show the splash page...
 		ServiceProvider.get().getZuliaService().getInstanceInfo(new AsyncCallback<InstanceInfo>() {
 			@Override
 			public void onFailure(Throwable caught) {
+				MaterialLoader.loading(false);
 				ToastHelper.showFailure(caught.getMessage());
 			}
 
@@ -203,6 +206,7 @@ public class PlaceHandler implements PlaceChangeEvent.Handler {
 			public void onSuccess(InstanceInfo result) {
 				UIQueryState.setIndexes(result.getIndexes());
 				getWidgetController().getHomeView().drawSplashPage(result);
+				MaterialLoader.loading(false);
 				getContentPresenter().setContent(getWidgetController().getHomeView());
 			}
 		});

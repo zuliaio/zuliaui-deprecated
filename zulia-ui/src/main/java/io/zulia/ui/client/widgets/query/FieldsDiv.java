@@ -19,16 +19,22 @@ import java.util.List;
  */
 public class FieldsDiv extends MaterialRow {
 
+	private MaterialAutoComplete autoComplete;
+
 	public FieldsDiv(String indexName, List<String> fieldsToShowList, List<String> fieldsInUiQueryObject) {
 
 		MaterialColumn column = new MaterialColumn(12, 12, 12);
 
 		if (fieldsToShowList.size() > 250) {
 
-			MaterialAutoComplete autoComplete = new MaterialAutoComplete(new FieldNameSuggest(indexName));
+			autoComplete = new MaterialAutoComplete(new FieldNameSuggest(indexName));
 			autoComplete.setType(AutocompleteType.CHIP);
 			autoComplete.setPlaceholder("Start typing for field names...");
 			autoComplete.setAutoSuggestLimit(10);
+			autoComplete.addValueChangeHandler(event -> {
+				fieldsInUiQueryObject.clear();
+				fieldsInUiQueryObject.addAll(autoComplete.getItemValues());
+			});
 
 			column.add(autoComplete);
 
@@ -90,4 +96,7 @@ public class FieldsDiv extends MaterialRow {
 		add(column);
 	}
 
+	public MaterialAutoComplete getAutoComplete() {
+		return autoComplete;
+	}
 }

@@ -20,13 +20,13 @@ public class CustomTabPanel extends MaterialRow {
 	private MaterialTab materialTab;
 	private final MaterialColumn mainColumn;
 
-	public CustomTabPanel(TabType tabType) {
+	public CustomTabPanel() {
 
 		materialTab = new MaterialTab();
-		materialTab.setType(tabType);
-		materialTab.setBackgroundColor(Color.ORANGE_LIGHTEN_1);
+		materialTab.setType(TabType.DEFAULT);
+		materialTab.setBackgroundColor(Color.GREY_DARKEN_1);
 		materialTab.setTextColor(Color.WHITE);
-		materialTab.setIndicatorColor(Color.GREY_DARKEN_1);
+		materialTab.setIndicatorColor(Color.ORANGE_LIGHTEN_1);
 
 		mainColumn = new MaterialColumn();
 		mainColumn.setGrid("s12");
@@ -80,4 +80,7 @@ public class CustomTabPanel extends MaterialRow {
 
 	}
 
+	public MaterialTab getMaterialTab() {
+		return materialTab;
+	}
 }

@@ -13,6 +13,7 @@ import io.zulia.client.pool.ZuliaWorkPool;
 import io.zulia.client.result.GetIndexesResult;
 import io.zulia.client.result.QueryResult;
 import io.zulia.message.ZuliaQuery;
+import io.zulia.ui.ConfigLoader;
 import io.zulia.ui.client.services.UIQueryService;
 import io.zulia.ui.shared.IndexInfo;
 import io.zulia.ui.shared.InstanceInfo;
@@ -31,7 +32,6 @@ import javax.servlet.ServletException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TreeMap;
 
 import static io.zulia.message.ZuliaBase.Similarity;
@@ -55,26 +55,20 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 	private static final int MB = 1024 * 1024;
 	private static final String QUERY_HISTORY = "queryHistory";
 	private ZuliaWorkPool zuliaWorkPool;
-	private String zuliaVersion;
-	private String luceneVersion;
 	private Datastore datastore;
+	private Map<String, String> config = ConfigLoader.getConfig();
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
 
 		try {
-			ZuliaPoolConfig zuliaPoolConfig = new ZuliaPoolConfig().addNode("localhost").setDefaultRetries(2);
+			ZuliaPoolConfig zuliaPoolConfig = new ZuliaPoolConfig().addNode(config.get("zuliaHost")).setDefaultRetries(2);
 			zuliaPoolConfig.setNodeUpdateEnabled(false);
 			zuliaWorkPool = new ZuliaWorkPool(zuliaPoolConfig);
 
-			Properties properties = new Properties();
-			properties.load(UIQueryServiceImpl.class.getResourceAsStream("/version.properties"));
-			zuliaVersion = properties.getProperty("zuliaVersion");
-			luceneVersion = properties.getProperty("luceneVersion");
-
 			MongoClientOptions mongoClientOptions = MongoClientOptions.builder().connectionsPerHost(32).build();
-			MongoClient mongoClient = new MongoClient("localhost", mongoClientOptions);
+			MongoClient mongoClient = new MongoClient(config.get("mongoHost"), mongoClientOptions);
 			Morphia morphia = new Morphia();
 			morphia.map(UIQueryObject.class);
 			datastore = morphia.createDatastore(mongoClient, QUERY_HISTORY);
@@ -83,15 +77,14 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 		catch (Exception e) {
 			LOG.error("Failed to initiate Zulia work pool.", e);
 		}
-
 	}
 
 	@Override
 	public InstanceInfo getInstanceInfo() throws Exception {
 		try {
 			InstanceInfo instanceInfo = new InstanceInfo();
-			instanceInfo.setZuliaVersion(zuliaVersion);
-			instanceInfo.setLuceneVersion(luceneVersion);
+			instanceInfo.setZuliaVersion(config.get("zuliaVersion"));
+			instanceInfo.setLuceneVersion(config.get("luceneVersion"));
 
 			List<IndexInfo> indexInfoList = getIndexInfos();
 
@@ -296,15 +289,9 @@ public class UIQueryServiceImpl extends RemoteServiceServlet implements UIQueryS
 			}
 
 			for (String facet : uiQueryObject.getFacets()) {
-
-				for (ZuliaQuery.FacetGroup facetGroup : queryResult.getFacetGroups()) {
-					System.out.println("FacetGroup: " + facetGroup.getCountRequest().getFacetField().getLabel());
-					System.out.println("FacetGroup2: " + facetGroup.getCountRequest().getFacetField().getValue());
-					System.out.println("FacetGroup3: " + facetGroup.getFacetCountList());
-				}
 				if (queryResult.getFacetCounts(facet) != null) {
 					for (FacetCount fc : queryResult.getFacetCounts(facet)) {
-						results.addFacetCount(fc.getFacet(), fc.getCount());
+						results.addFacetCount(facet, fc.getFacet(), fc.getCount());
 					}
 				}
 			}

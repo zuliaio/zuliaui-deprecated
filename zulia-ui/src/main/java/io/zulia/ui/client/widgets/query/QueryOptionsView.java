@@ -5,7 +5,6 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.constants.TabType;
 import gwt.material.design.client.ui.MaterialBadge;
 import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCollapsible;
@@ -57,7 +56,7 @@ public class QueryOptionsView extends Div {
 
 		if (!uiQueryResults.getJsonDocs().isEmpty()) {
 			MaterialBadge resultsBadge = new MaterialBadge("Total Results: " + NumberFormat.getFormat("#,##0").format(uiQueryResults.getTotalResults()));
-			resultsBadge.setBackgroundColor(Color.GREY);
+			resultsBadge.setBackgroundColor(Color.GREY_DARKEN_1);
 			add(resultsBadge);
 			add(new Br());
 		}
@@ -192,22 +191,25 @@ public class QueryOptionsView extends Div {
 		body.setPaddingTop(0);
 		body.setBackgroundColor(Color.WHITE);
 
-		CustomTabPanel tabPanel = new CustomTabPanel(TabType.DEFAULT);
+		CustomTabPanel tabPanel = new CustomTabPanel();
 		tabPanel.setMarginLeft(-40);
 		tabPanel.setMarginRight(-40);
 
 		String qfTabId = UIUtil.getRandomId();
 		MaterialTabItem qfTabItem = tabPanel.createAndAddTabListItem("QF", "#" + qfTabId);
-		tabPanel.createAndAddTabPane(qfTabId, new FieldsDiv(indexInfo.getName(), indexInfo.getQfList(), uiQueryObject.getQueryFields()));
+		FieldsDiv qfFieldsDiv = new FieldsDiv(indexInfo.getName(), indexInfo.getQfList(), uiQueryObject.getQueryFields());
+		tabPanel.createAndAddTabPane(qfTabId, qfFieldsDiv);
 		header.addClickHandler(clickEvent -> qfTabItem.selectTab());
 
 		String flTabId = UIUtil.getRandomId();
 		tabPanel.createAndAddTabListItem("FL", "#" + flTabId);
-		tabPanel.createAndAddTabPane(flTabId, new FieldsDiv(indexInfo.getName(), indexInfo.getFlList(), uiQueryObject.getDisplayFields()));
+		FieldsDiv flFieldsDiv = new FieldsDiv(indexInfo.getName(), indexInfo.getFlList(), uiQueryObject.getDisplayFields());
+		tabPanel.createAndAddTabPane(flTabId, flFieldsDiv);
 
 		String facetsTabId = UIUtil.getRandomId();
 		tabPanel.createAndAddTabListItem("Facets", "#" + facetsTabId);
-		tabPanel.createAndAddTabPane(facetsTabId, new FieldsDiv(indexInfo.getName(), indexInfo.getFacetList(), uiQueryObject.getFacets()));
+		FieldsDiv facetsFieldsDiv = new FieldsDiv(indexInfo.getName(), indexInfo.getFacetList(), uiQueryObject.getFacets());
+		tabPanel.createAndAddTabPane(facetsTabId, facetsFieldsDiv);
 
 		body.add(tabPanel);
 
@@ -223,6 +225,7 @@ public class QueryOptionsView extends Div {
 				uiQueryObject.getFilterQueries().add(fqw.getValue());
 			}
 		}
+
 		ServiceProvider.get().getZuliaService().saveQuery(uiQueryObject, new AsyncCallback<String>() {
 			@Override
 			public void onFailure(Throwable caught) {
