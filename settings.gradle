@@ -1,3 +1,0 @@
-include 'zulia-ui'
-
-rootProject.name = "Zulia UI"

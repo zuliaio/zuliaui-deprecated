@@ -1,0 +1,14 @@
+<v-container fluid>
+    <v-select
+            v-model="selectedIndex"
+            :items="indexes"
+            label="Indexes"
+            outlined
+    ></v-select>
+    <div>
+        <v-btn small color="secondary" @click="search">Search</v-btn>
+    </div>
+    <div>
+        <span v-html="results"></span>
+    </div>
+</v-container>

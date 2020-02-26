@@ -1,0 +1,10 @@
+html {
+    overflow-y: auto;
+}
+
+.clickable-text {
+    cursor: pointer;
+}
+
+
+

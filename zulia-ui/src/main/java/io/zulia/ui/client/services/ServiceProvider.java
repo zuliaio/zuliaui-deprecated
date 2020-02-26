@@ -1,6 +1,7 @@
 package io.zulia.ui.client.services;
 
-import com.google.gwt.core.shared.GWT;
+import com.intendia.gwt.autorest.client.ResourceVisitor;
+import elemental2.dom.DomGlobal;
 
 /**
  * Created by Payam Meyer on 5/13/15.
@@ -14,14 +15,19 @@ public class ServiceProvider {
 		return serviceProvider;
 	}
 
-	private UIQueryServiceAsync uiQueryServiceAsync;
+	private ZuliaServiceClient service;
 
-	private ServiceProvider() {
-		uiQueryServiceAsync = GWT.create(UIQueryService.class);
+	private static ResourceVisitor osm() {
+		String baseUrl = DomGlobal.window.location.getProtocol() + "//" + DomGlobal.window.location.getHost();
+		return new CustomAutoREST().path(baseUrl);
 	}
 
-	public UIQueryServiceAsync getZuliaService() {
-		return uiQueryServiceAsync;
+	private ServiceProvider() {
+		service = new ZuliaServiceClient_RestServiceModel(ServiceProvider::osm);
+	}
+
+	public ZuliaServiceClient getService() {
+		return service;
 	}
 
 }

@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='zuliaui'>
-
-    <inherits name='com.google.gwt.user.User'/>
-    <inherits name='com.google.gwt.place.Place'/>
-    <inherits name="com.google.gwt.i18n.I18N"/>
-
-    <inherits name="gwt.material.design.GwtMaterialWithJQuery"/>
-    <inherits name="gwt.material.design.addins.GwtMaterialAddins"/>
-    <inherits name="gwt.material.design.themes.ThemeOrange"/>
-    <inherits name="gwt.material.design.themes.ThemeOrangeResources"/>
-
-    <inherits name="org.mongodb.morphia.Morphia"/>
+    <inherits name="com.google.gwt.resources.Resources"/>
+    <inherits name="com.google.gwt.event.logical.LogicalEvent"/>
+    <inherits name="com.google.gwt.user.UI"/>
+    <inherits name="com.google.gwt.json.JSON"/>
+    <inherits name='com.axellience.vuegwt.VueGWT'/>
+    <inherits name='com.axellience.vueroutergwt.VueRouterGwt'/>
+    <inherits name="com.intendia.gwt.autorest.AutoRest"/>
+    <inherits name="com.google.web.bindery.event.Event"/>
+    <inherits name="com.google.gwt.event.EventBase"/>
+    <inherits name="elemental2.webstorage.WebStorage"/>
+    <inherits name="us.ascendtech.momentjs.MomentJS"/>
+    <inherits name="org.jboss.gwt.elemento.Core"/>
 
     <entry-point class='io.zulia.ui.client.ZuliaUI'/>
 
-    <set-configuration-property name="CssResource.enableGss" value="true"/>
-
-
     <source path='client'/>
     <source path='shared'/>
-
 </module>
+

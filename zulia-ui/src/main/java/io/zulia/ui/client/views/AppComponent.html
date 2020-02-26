@@ -1,0 +1,51 @@
+<v-app id="app">
+    <v-app-bar clipped-left color="primary" dark fixed app flat clipped-right>
+        <v-toolbar-title style="cursor: pointer" @click="goHome">Zulia UI</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="hidden-sm-and-down">
+            <v-menu bottom left offset-y style="margin-left: 5px;">
+                <template slot="activator" slot-scope="{ Object on }">
+                    <v-btn icon v-on="on">
+                        <v-icon>more_vert</v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item color="primary">
+                        <v-list-item-content>
+                            <v-list-item-title>Logout</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </v-toolbar-items>
+    </v-app-bar>
+    <v-content style="overflow: hidden;">
+        <router-view></router-view>
+    </v-content>
+
+    <div id="success">
+        <v-snackbar :multi-line="multiLine" top="top" right="right" v-model="showSuccess" color="success">
+            <div>{{ successMessage }}</div>
+            <v-btn text color="white" @click.native="showSuccess = false">Close</v-btn>
+        </v-snackbar>
+    </div>
+
+    <div id="error">
+        <v-snackbar :multi-line="multiLine" top="top" right="right" v-model="showError" color="error">
+            <div>{{ errorMessage }}</div>
+            <v-btn text color="white" @click.native="showError = false">Close</v-btn>
+        </v-snackbar>
+    </div>
+
+    <div id="warning">
+        <v-snackbar :multi-line="multiLine" top="top" right="right" v-model="showWarning" color="warning">
+            <div>{{ warningMessage }}</div>
+            <v-btn text color="white" @click.native="showWarning = false">Close</v-btn>
+        </v-snackbar>
+    </div>
+    <v-footer color="primary" app fixed>
+        <a href="http://www.ascend-tech.us" class="white--text caption" style="margin-left: 5px;text-decoration: none">© {{currentYear}} Zulia | Backed by
+            Ascendant Software
+            Technology, LLC</a>
+    </v-footer>
+</v-app>
