@@ -18,7 +18,7 @@ public class ServiceProvider {
 	private ZuliaServiceClient service;
 
 	private static ResourceVisitor osm() {
-		String baseUrl = DomGlobal.window.location.getProtocol() + "//" + DomGlobal.window.location.getHost();
+		String baseUrl = DomGlobal.window.location.protocol + "//" + DomGlobal.window.location.host;
 		return new CustomAutoREST().path(baseUrl);
 	}
 

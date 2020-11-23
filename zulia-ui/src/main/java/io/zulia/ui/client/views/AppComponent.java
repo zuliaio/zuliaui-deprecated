@@ -36,6 +36,9 @@ public class AppComponent implements IsVueComponent, NotifyHandler, HasBeforeCre
 	boolean showWarning;
 
 	@Data
+	boolean drawer;
+
+	@Data
 	boolean multiLine = true;
 
 	@Data

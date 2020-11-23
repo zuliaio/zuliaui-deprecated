@@ -1,4 +1,4 @@
-package io.zulia.ui.client.views;
+package io.zulia.ui.client.views.home;
 
 import com.axellience.vuegwt.core.annotations.component.Component;
 import com.axellience.vuegwt.core.annotations.component.Data;
@@ -12,7 +12,7 @@ import io.zulia.ui.client.dto.ResultDocumentDTO;
 import io.zulia.ui.client.events.NotifyEvent;
 import io.zulia.ui.client.services.ServiceProvider;
 import jsinterop.annotations.JsMethod;
-import org.jboss.gwt.elemento.core.Elements;
+import org.jboss.elemento.Elements;
 
 @Component
 public class HomeComponent implements IsVueComponent, HasBeforeMount {

@@ -11,7 +11,9 @@
     <inherits name="com.google.gwt.event.EventBase"/>
     <inherits name="elemental2.webstorage.WebStorage"/>
     <inherits name="us.ascendtech.momentjs.MomentJS"/>
-    <inherits name="org.jboss.gwt.elemento.Core"/>
+    <inherits name="org.jboss.elemento.Core"/>
+    <inherits name="elemental2.dom.Dom"/>
+    <inherits name="elemental2.core.Core"/>
 
     <entry-point class='io.zulia.ui.client.ZuliaUI'/>
 
