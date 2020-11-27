@@ -44,9 +44,9 @@
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <v-toolbar-title style="cursor: pointer" @click="goHome">Zulia UI</v-toolbar-title>
     </v-app-bar>
-    <v-content style="overflow: hidden;">
+    <v-main style="overflow: hidden;">
         <router-view></router-view>
-    </v-content>
+    </v-main>
 
     <div id="success">
         <v-snackbar :multi-line="multiLine" top="top" right="right" v-model="showSuccess" color="success">

@@ -1,7 +1,7 @@
 plugins {
     java
-    id("us.ascendtech.gwt.lib") version "0.5.9" apply false
-    id("us.ascendtech.gwt.modern") version "0.5.9" apply false
+    id("us.ascendtech.gwt.lib") version "0.5.11" apply false
+    id("us.ascendtech.gwt.modern") version "0.5.11" apply false
 }
 
 defaultTasks("build")

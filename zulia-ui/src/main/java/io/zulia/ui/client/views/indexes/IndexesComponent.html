@@ -1,3 +1,40 @@
-<v-container fluid>
+<v-container fluid class="pa-10">
+    <v-select
+            v-model="selectedIndex"
+            :items="indexes"
+            label="Indexes"
+            outlined
+    ></v-select>
+    <v-row>
+        <v-col cols="10">
+            <v-text-field
+                    label="Query"
+                    outlined
+                    v-model="query"
+                    clearable
+                    append-icon="search"
+                    click:append-icon="search"
+                    v-on:keyup.enter="search"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="2">
+            <v-text-field
+                    label="Rows"
+                    outlined
+                    v-model="rows"
+            ></v-text-field>
+        </v-col>
+    </v-row>
 
+    <div>
+        <template v-if="results.length > 0">
+            <vue-json-pretty :data="results">
+            </vue-json-pretty>
+        </template>
+        <template v-else>
+            <p class="h5">No results.</p>
+        </template>
+
+    </div>
+    <please-wait-dialog ref="pleaseWaitDialog"></please-wait-dialog>
 </v-container>

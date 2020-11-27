@@ -1,14 +1,30 @@
+<vue-gwt:import class="io.zulia.ui.client.dto.MemberDTO"/>
+
 <v-container fluid>
-    <v-select
-            v-model="selectedIndex"
-            :items="indexes"
-            label="Indexes"
-            outlined
-    ></v-select>
-    <div>
-        <v-btn small color="secondary" @click="search">Search</v-btn>
-    </div>
-    <div>
-        <span v-html="results"></span>
-    </div>
+    <v-row>
+        <v-col sm="12" md="6">
+            <template v-for="(MemberDTO member, i) in members">
+                <member-card :member="member"></member-card>
+            </template>
+        </v-col>
+        <v-col sm="12" md="6">
+            <v-card
+                    class="mx-auto"
+                    max-width="700"
+            >
+                <div class="ma-2">
+                    <strong class="blue-grey--text">Used space:</strong><span class="ml-2 grey--text">{{usedDataDirSpaceGBFormatted}}</span>
+                </div>
+                <div class="ma-2">
+                    <strong class="blue-grey--text">Free space:</strong><span class="ml-2 grey--text">{{freeDataDirSpaceGBFormatted}}</span>
+                </div>
+                <div class="ma-2">
+                    <strong class="blue-grey--text">Total space:</strong><span class="ml-2 grey--text">{{totalDataDirSpaceGBFormatted}}</span>
+                </div>
+
+                <div class="mt-2" id="memoryPieChart"></div>
+            </v-card>
+
+        </v-col>
+    </v-row>
 </v-container>

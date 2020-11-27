@@ -14,6 +14,7 @@
     <inherits name="org.jboss.elemento.Core"/>
     <inherits name="elemental2.dom.Dom"/>
     <inherits name="elemental2.core.Core"/>
+    <inherits name="us.ascendtech.highcharts.Highcharts"/>
 
     <entry-point class='io.zulia.ui.client.ZuliaUI'/>
 

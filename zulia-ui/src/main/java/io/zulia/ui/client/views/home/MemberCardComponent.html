@@ -1,0 +1,50 @@
+<vue-gwt:import class="io.zulia.ui.client.dto.MemberDTO"/>
+
+<v-card
+        class="mx-auto"
+        max-width="650"
+>
+    <v-card-text>
+        <div>
+            <strong class="blue-grey--text">Server Address: </strong><span class="grey--text">{{serverAddress}}</span>
+        </div>
+        <div>
+            <strong class="blue-grey--text">Server Port: </strong><span class="grey--text">{{servicePort}}</span>
+        </div>
+        <div>
+            <strong class="blue-grey--text">REST Port: </strong><span class="grey--text">{{restPort}}</span>
+        </div>
+
+        <div class="mt-2">
+            <v-select
+                    v-model="selectedIndex"
+                    :items="indexMappings"
+                    hint="Select to see index details."
+                    outlined
+                    chips
+                    item-text="name"
+                    persistent-hint
+                    return-object
+                    label="Select Index"
+            ></v-select>
+        </div>
+
+        <template v-if="selectedIndex != null">
+            <div>
+                <strong class="blue-grey--text">Index Name: </strong><span class="grey--text">{{selectedIndex.getName()}}</span>
+            </div>
+            <div>
+                <strong class="blue-grey--text">Size: </strong><span class="grey--text">{{selectedIndex.getSize()}}</span>
+            </div>
+            <div>
+                <strong class="blue-grey--text"># Primary Shards: </strong><span class="grey--text">{{selectedIndex.getPrimary()}}</span>
+            </div>
+            <div>
+                <strong class="blue-grey--text"># Replica Shards: </strong><span class="grey--text">{{selectedIndex.getReplica()}}</span>
+            </div>
+        </template>
+
+    </v-card-text>
+
+
+</v-card>
