@@ -11,12 +11,13 @@ import 'es7-object-polyfill';
 import Highcharts from 'highcharts';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
+import VueSplit from 'vue-split-panel';
 
 Vue.component("vue-json-pretty", VueJsonPretty);
 
 Vue.use(VueRouter);
-
 Vue.use(Vuetify);
+Vue.use(VueSplit);
 
 window.Vue = Vue;
 window.Vuetify = Vuetify;

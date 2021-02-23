@@ -1,40 +1,106 @@
-<v-container fluid class="pa-10">
-    <v-select
-            v-model="selectedIndex"
-            :items="indexes"
-            label="Indexes"
-            outlined
-    ></v-select>
-    <v-row>
-        <v-col cols="10">
-            <v-text-field
-                    label="Query"
-                    outlined
-                    v-model="query"
-                    clearable
-                    append-icon="search"
-                    click:append-icon="search"
-                    v-on:keyup.enter="search"
-            ></v-text-field>
-        </v-col>
-        <v-col cols="2">
-            <v-text-field
-                    label="Rows"
-                    outlined
-                    v-model="rows"
-            ></v-text-field>
-        </v-col>
-    </v-row>
+<v-container fluid>
+    <Split v-bind:style="splitPanelHeight">
+        <SplitArea :size="25">
+            <v-container class="pa-3">
+                <v-select
+                        v-model="selectedIndex"
+                        :items="indexes"
+                        label="Indexes"
+                        multiple
+                        outlined
+                ></v-select>
+                <v-row>
+                    <v-col cols="10">
+                        <v-text-field
+                                label="Query"
+                                outlined
+                                v-model="query"
+                                clearable
+                                append-icon="search"
+                                click:append-icon="search"
+                                v-on:keyup.enter="search"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-text-field
+                                label="Rows"
+                                outlined
+                                v-model="rows"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row no-gutters>
+                    <v-col cols="12">
+                        <v-text-field
+                                label="Sort Fields"
+                                outlined
+                                v-model="sortFields"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row no-gutters>
+                    <v-col cols="12">
+                        <v-text-field
+                                label="Query Fields"
+                                outlined
+                                v-model="queryFields"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row no-gutters>
+                    <v-col cols="12">
+                        <v-text-field
+                                label="Document Fields"
+                                outlined
+                                v-model="documentFields"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row no-gutters>
+                    <v-col cols="12">
+                        <v-btn
+                                color="primary"
+                                @click="search"
+                        >
+                            Execute
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </SplitArea>
+        <SplitArea :size="75">
+            <v-container fluid>
+                <template v-if="resultsMap.size() > 0">
+                    <v-tabs
+                            v-model="tab"
+                            background-color="primary"
+                            dark
+                    >
+                        <v-tab
+                                v-for="String item in resultsMap.keySet()"
+                                :key="item"
+                        >
+                            {{ item }}
+                        </v-tab>
+                    </v-tabs>
 
-    <div>
-        <template v-if="results.length > 0">
-            <vue-json-pretty :data="results">
-            </vue-json-pretty>
-        </template>
-        <template v-else>
-            <p class="h5">No results.</p>
-        </template>
+                    <v-tabs-items v-model="tab">
+                        <v-tab-item
+                                v-for="String item in resultsMap.keySet()"
+                                :key="item"
+                        >
+                            <vue-json-pretty :data="resultsMap.get(item)">
+                            </vue-json-pretty>
+                        </v-tab-item>
+                    </v-tabs-items>
 
-    </div>
+                </template>
+                <template v-else>
+                    <p class="h5">No results.</p>
+                </template>
+
+            </v-container>
+        </SplitArea>
+    </Split>
     <please-wait-dialog ref="pleaseWaitDialog"></please-wait-dialog>
 </v-container>

@@ -86,5 +86,6 @@ public interface ZuliaConstants {
 	String CURSOR = "cursor";
 
 	String SCORE_FIELD = "zuliaScore";
+	String TRUNCATE = "truncate";
 
 }
