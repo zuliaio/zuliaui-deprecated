@@ -6,7 +6,6 @@ import com.axellience.vuegwt.core.client.component.IsVueComponent;
 import com.axellience.vuegwt.core.client.component.hooks.HasBeforeMount;
 import com.axellience.vuegwt.core.client.tools.JsUtils;
 import elemental2.core.JsArray;
-import elemental2.dom.DomGlobal;
 import io.zulia.ui.client.services.ServiceProvider;
 import io.zulia.ui.client.util.NotifyUtil;
 import jsinterop.annotations.JsMethod;
@@ -31,15 +30,15 @@ public class SettingsComponent implements IsVueComponent, HasBeforeMount {
 		}
 		indexes.splice(0, indexes.length);
 
-		ServiceProvider.get().getService().getIndexes().subscribe(indexes -> {
+		ServiceProvider.get().getService().getIndexes(indexes -> {
 			this.indexes = indexes.getIndexes();
-		}, onError -> DomGlobal.console.log(onError));
+		}, NotifyUtil::handleError);
 	}
 
 	@JsMethod
 	void getIndexSettings() {
-		ServiceProvider.get().getService().getIndexSettings(selectedIndex)
-				.subscribe(indexDTO -> this.indexSettings = indexDTO.getIndexSettings(), NotifyUtil::handleError);
+		ServiceProvider.get().getService()
+				.getIndexSettings(selectedIndex, indexDTO -> this.indexSettings = indexDTO.getIndexSettings(), NotifyUtil::handleError);
 	}
 
 }

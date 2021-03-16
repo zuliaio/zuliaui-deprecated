@@ -4,9 +4,9 @@
     <inherits name="com.google.gwt.event.logical.LogicalEvent"/>
     <inherits name="com.google.gwt.user.UI"/>
     <inherits name="com.google.gwt.json.JSON"/>
-    <inherits name='com.axellience.vuegwt.VueGWT'/>
-    <inherits name='com.axellience.vueroutergwt.VueRouterGwt'/>
-    <inherits name="com.intendia.gwt.autorest.AutoRest"/>
+    <inherits name="com.axellience.vuegwt.VueGWT"/>
+    <inherits name="us.ascendtech.gwt.simplerest.SimpleRest"/>
+    <inherits name="com.axellience.vueroutergwt.VueRouterGwt"/>
     <inherits name="com.google.web.bindery.event.Event"/>
     <inherits name="com.google.gwt.event.EventBase"/>
     <inherits name="elemental2.webstorage.WebStorage"/>

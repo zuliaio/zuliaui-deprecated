@@ -54,7 +54,7 @@ module.exports = {
         port: 8080,
         proxy: {
             '/': {
-                target: 'http://192.168.198.200:32192',
+                target: 'http://localhost:32192',
                 ws: false,
                 changeOrigin: true,
                 secure: false
