@@ -38,6 +38,7 @@
     "es7-object-polyfill": "^1.0.1",
     "highcharts": "^8.2.2",
     "vue-json-pretty": "^1.7.1",
-    "vue-split-panel": "^1.0.4"
+    "vue-split-panel": "^1.0.4",
+    "vue-smooth-dnd": "^0.8.1"
   }
 }

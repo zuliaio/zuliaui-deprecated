@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component(components = { PleaseWaitDialogComponent.class })
-public class IndexesComponent implements IsVueComponent, HasBeforeMount, HasBeforeCreate, HasMounted, ResizeHandler {
+public class QueryComponent implements IsVueComponent, HasBeforeMount, HasBeforeCreate, HasMounted, ResizeHandler {
 
 	@Ref
 	PleaseWaitDialogComponent pleaseWaitDialog;

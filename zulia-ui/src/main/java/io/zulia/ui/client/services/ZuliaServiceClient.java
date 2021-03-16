@@ -3,6 +3,7 @@ package io.zulia.ui.client.services;
 import com.intendia.gwt.autorest.client.AutoRestGwt;
 import elemental2.core.JsArray;
 import io.reactivex.Single;
+import io.zulia.ui.client.dto.IndexDTO;
 import io.zulia.ui.client.dto.IndexesDTO;
 import io.zulia.ui.client.dto.MembersDTO;
 import io.zulia.ui.client.dto.ResultsDTO;
@@ -26,6 +27,10 @@ public interface ZuliaServiceClient {
 	@GET
 	@Path("indexes")
 	Single<IndexesDTO> getIndexes();
+
+	@GET
+	@Path("index")
+	Single<IndexDTO> getIndexSettings(@QueryParam(ZuliaConstants.INDEX) String index);
 
 	@GET
 	@Path("stats")
