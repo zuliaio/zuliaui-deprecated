@@ -36,7 +36,7 @@
     "ag-grid-community": "^24.1.0",
     "ag-grid-vue": "^24.1.1",
     "es7-object-polyfill": "^1.0.1",
-    "highcharts": "^8.2.2",
+    "highcharts": "^9.0.0",
     "vue-json-pretty": "^1.7.1",
     "vue-split-panel": "^1.0.4"
   }
