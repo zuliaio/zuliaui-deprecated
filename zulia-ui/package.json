@@ -14,7 +14,7 @@
     "fibers": "^5.0.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.0.0-beta.5",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "sass": "^1.29.0",
     "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0",
