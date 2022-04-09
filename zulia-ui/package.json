@@ -32,7 +32,7 @@
     "vuetify": "^2.4.4",
     "@mdi/font": "^5.9.55",
     "@mdi/js": "^5.9.55",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "ag-grid-community": "^24.1.0",
     "ag-grid-vue": "^24.1.1",
     "es7-object-polyfill": "^1.0.1",
