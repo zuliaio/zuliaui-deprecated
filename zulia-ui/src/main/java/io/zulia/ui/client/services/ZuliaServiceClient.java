@@ -13,7 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 @AutoRestGwt
-@Path("")
+@Path("/zulia")
 public interface ZuliaServiceClient {
 
 	@GET
