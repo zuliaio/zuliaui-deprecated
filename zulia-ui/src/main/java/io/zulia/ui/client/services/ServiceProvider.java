@@ -1,6 +1,5 @@
 package io.zulia.ui.client.services;
 
-import com.intendia.gwt.autorest.client.ResourceVisitor;
 import elemental2.dom.DomGlobal;
 
 /**
@@ -9,7 +8,7 @@ import elemental2.dom.DomGlobal;
  */
 public class ServiceProvider {
 
-	private static ServiceProvider serviceProvider = new ServiceProvider();
+	private final static ServiceProvider serviceProvider = new ServiceProvider();
 
 	public static ServiceProvider get() {
 		return serviceProvider;
@@ -17,13 +16,9 @@ public class ServiceProvider {
 
 	private ZuliaServiceClient service;
 
-	private static ResourceVisitor osm() {
-		String baseUrl = DomGlobal.window.location.protocol + "//" + DomGlobal.window.location.host;
-		return new CustomAutoREST().path(baseUrl);
-	}
-
 	private ServiceProvider() {
-		service = new ZuliaServiceClient_RestServiceModel(ServiceProvider::osm);
+		String baseUrl = DomGlobal.window.location.protocol + "//" + DomGlobal.window.location.host;
+		service = new ZuliaServiceClientSimpleRest(baseUrl);
 	}
 
 	public ZuliaServiceClient getService() {
