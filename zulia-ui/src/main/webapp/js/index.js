@@ -12,8 +12,11 @@ import Highcharts from 'highcharts';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import VueSplit from 'vue-split-panel';
+import {Container, Draggable} from 'vue-smooth-dnd';
 
 Vue.component("vue-json-pretty", VueJsonPretty);
+Vue.component("Container", Container);
+Vue.component("Draggable", Draggable);
 
 Vue.use(VueRouter);
 Vue.use(Vuetify);

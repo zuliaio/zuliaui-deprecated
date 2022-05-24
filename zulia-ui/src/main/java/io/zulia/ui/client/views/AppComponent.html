@@ -18,16 +18,38 @@
                     </v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item to="/indexes" @click="drawer = !drawer">
-                <v-list-item-action>
-                    <v-icon>mdi-database</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>
-                        Indexes
-                    </v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
+            <v-list-group
+                    prepend-icon="mdi-database"
+                    no-action
+            >
+                <template slot="activator">
+                    <v-list-item-content>
+                        <v-list-item-title>Indexes</v-list-item-title>
+                    </v-list-item-content>
+                </template>
+
+                <v-list-item to="/query" @click="drawer = !drawer">
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            Query
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item to="/visualization" @click="drawer = !drawer">
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            Visualization
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item to="/settings" @click="drawer = !drawer">
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            Settings
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list-group>
             <v-list-item to="/logs" @click="drawer = !drawer">
                 <v-list-item-action>
                     <v-icon>mdi-post</v-icon>

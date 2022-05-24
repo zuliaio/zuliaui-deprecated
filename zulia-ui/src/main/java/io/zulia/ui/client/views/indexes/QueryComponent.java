@@ -18,6 +18,7 @@ import io.zulia.ui.client.dto.NotificationType;
 import io.zulia.ui.client.dto.ResultDocumentDTO;
 import io.zulia.ui.client.events.NotifyEvent;
 import io.zulia.ui.client.services.ServiceProvider;
+import io.zulia.ui.client.util.NotifyUtil;
 import io.zulia.ui.client.views.common.PleaseWaitDialogComponent;
 import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsProperty;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component(components = { PleaseWaitDialogComponent.class })
-public class IndexesComponent implements IsVueComponent, HasBeforeMount, HasBeforeCreate, HasMounted, ResizeHandler {
+public class QueryComponent implements IsVueComponent, HasBeforeMount, HasBeforeCreate, HasMounted, ResizeHandler {
 
 	@Ref
 	PleaseWaitDialogComponent pleaseWaitDialog;
@@ -76,19 +77,19 @@ public class IndexesComponent implements IsVueComponent, HasBeforeMount, HasBefo
 		}
 
 		ServiceProvider.get().getService()
-				.search(selectedIndex, query, rows.intValue(), parseValues(sortFields), parseValues(queryFields), parseValues(documentFields), true)
-				.subscribe(jsonResults -> {
-					resultsMap.clear();
+				.search(selectedIndex, query, rows.intValue(), parseValues(sortFields), parseValues(queryFields), parseValues(documentFields), true,
+						jsonResults -> {
+							resultsMap.clear();
 
-					for (ResultDocumentDTO rd : Elements.elements(jsonResults.getResults())) {
-						resultsMap.computeIfAbsent(rd.getIndexName(), v -> new JsArray<>()).push(Global.JSON.parse(Global.JSON.stringify(rd)));
-					}
+							for (ResultDocumentDTO rd : Elements.elements(jsonResults.getResults())) {
+								resultsMap.computeIfAbsent(rd.getIndexName(), v -> new JsArray<>()).push(Global.JSON.parse(Global.JSON.stringify(rd)));
+							}
 
-					pleaseWaitDialog.hideLoading();
-				}, onError -> {
-					pleaseWaitDialog.hideLoading();
-					DomGlobal.console.log(onError);
-				});
+							pleaseWaitDialog.hideLoading();
+						}, (statusCode, status, errorBody) -> {
+							pleaseWaitDialog.hideLoading();
+							DomGlobal.console.log(errorBody);
+						});
 
 	}
 
@@ -119,9 +120,9 @@ public class IndexesComponent implements IsVueComponent, HasBeforeMount, HasBefo
 		}
 		indexes.splice(0, indexes.length);
 
-		ServiceProvider.get().getService().getIndexes().subscribe(indexes -> {
+		ServiceProvider.get().getService().getIndexes(indexes -> {
 			this.indexes = indexes.getIndexes();
-		}, onError -> DomGlobal.console.log(onError));
+		}, NotifyUtil::handleError);
 	}
 
 	private void calculateSplitPanelHeight() {

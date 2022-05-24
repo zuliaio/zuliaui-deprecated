@@ -1,0 +1,41 @@
+<vue-gwt:import class="io.zulia.ui.client.dto.Payload"/>
+
+<v-container fluid>
+    <v-row>
+        <v-col cols="12">
+            <v-btn
+                    color="primary"
+            >
+                Add Chart
+            </v-btn>
+        </v-col>
+    </v-row>
+    <v-row>
+        <v-col cols="12">
+            <Container @drop="onDrop" orientation="horizontal" lock-axis="x">
+                <Draggable v-for="(Payload item, index) in items" :key="item.id">
+                    <v-card dark color="primary">
+                        <div class="draggable-item">
+                            {{item.data}}
+                        </div>
+                    </v-card>
+                </Draggable>
+            </Container>
+        </v-col>
+    </v-row>
+</v-container>
+
+<style lang="css" scoped>
+    .draggable-item {
+        background-color: #364f68;
+        border: solid 1px #243248;
+        padding: 10px;
+        margin: 10px;
+        max-width: 450px;
+        border-radius: 5px;
+        font-size: 35pt;
+        color: white;
+        cursor: pointer;
+        text-align: center;
+    }
+</style>

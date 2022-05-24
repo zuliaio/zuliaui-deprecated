@@ -1,4 +1,5 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
     resolve: {
@@ -12,6 +13,22 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            implementation: require("sass"),
+                            sassOptions: {
+                                indentedSyntax: false
+                            },
+                        }
+                    }
+                ]
             },
             {
                 test: /\.vue$/,
@@ -28,13 +45,8 @@ module.exports = {
             },
             {
                 test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: 'fonts/'
-                    }
-                }
+                type: 'asset/resource',
+                dependency: {not: ['url']}
             }
         ]
     },
@@ -50,11 +62,19 @@ module.exports = {
     output: {
         filename: '[name].[contenthash].js'
     },
+    devtool: 'inline-cheap-module-source-map',
     devServer: {
         port: 8080,
+        static: {
+            directory: path.resolve(__dirname, "src", "main", "webapp", "public"),
+            publicPath: "/",
+            serveIndex: true,
+            watch: true,
+        },
         proxy: {
             '/': {
-                target: 'http://192.168.198.200:32192',
+                // TODO: ensure this points to your zulia node (localhost or an IP or a machine name)
+                target: 'http://your-zulia-node:32192',
                 ws: false,
                 changeOrigin: true,
                 secure: false

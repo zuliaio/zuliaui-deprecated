@@ -1,0 +1,36 @@
+<v-container fluid>
+    <v-row>
+        <v-col cols="4">
+            <v-select
+                    v-model="selectedIndex"
+                    :items="indexes"
+                    label="Indexes"
+                    outlined
+                    @change="getIndexSettings"
+            ></v-select>
+        </v-col>
+        <v-col cols="8">
+            <!--
+            <v-btn
+                    color="primary"
+            >
+                Optimize
+            </v-btn>
+            <v-btn
+                    color="error"
+            >
+                Delete
+            </v-btn>
+            -->
+        </v-col>
+    </v-row>
+    <v-row>
+        <v-col
+                cols="10"
+                offset-lg="2"
+        >
+            <vue-json-pretty :data="indexSettings">
+            </vue-json-pretty>
+        </v-col>
+    </v-row>
+</v-container>

@@ -49,11 +49,11 @@ public class HomeComponent implements IsVueComponent, HasBeforeMount {
 
 	@Override
 	public void beforeMount() {
-		ServiceProvider.get().getService().getStats().subscribe(statsDTO -> {
+		ServiceProvider.get().getService().getStats(statsDTO -> {
 
 			splineChartOptions = new ChartOptions();
 			Load load = () -> Scheduler.get().scheduleFixedDelay(() -> {
-				ServiceProvider.get().getService().getStats().subscribe(statsDTO1 -> {
+				ServiceProvider.get().getService().getStats(statsDTO1 -> {
 					Double value = statsDTO1.getJvmUsedMemoryMB();
 					Series series = splineChart.getSeries().getAt(0);
 					JsArray<Object> data = new JsArray<>(JsDate.now(), value);
@@ -96,7 +96,7 @@ public class HomeComponent implements IsVueComponent, HasBeforeMount {
 		}, NotifyUtil::handleError);
 
 		members = new JsArray<>();
-		ServiceProvider.get().getService().getMembers().subscribe(members -> {
+		ServiceProvider.get().getService().getMembers(members -> {
 			this.members = members.getMembers();
 		}, NotifyUtil::handleError);
 	}
