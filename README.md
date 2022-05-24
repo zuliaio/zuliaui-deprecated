@@ -1,6 +1,6 @@
 # zuliaui
 
-This a GWT UI for zulia.  This is out of date and incomplete.
+This is a GWT UI for zulia. This is out of date and very much a work in progress.
 
 To use:
 ```
