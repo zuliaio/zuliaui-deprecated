@@ -33,7 +33,7 @@
     "@mdi/font": "^6.6.96",
     "@mdi/js": "^6.6.96",
     "moment": "^2.29.4",
-    "ag-grid-community": "^24.1.0",
+    "ag-grid-community": "^32.0.1",
     "ag-grid-vue": "^24.1.1",
     "es7-object-polyfill": "^1.0.1",
     "vue-split-panel": "^1.0.4",
